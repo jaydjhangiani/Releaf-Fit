@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext, useEffect, useState } from "react";
+import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { SetCookie, DeleteCookie, hasCookie } from "./utility/CookieManager";
+import Dashboard from "./components/Dashboard";
+import Authenticate from "./components/Authenticate";
+import Navbar from "./components/Navbar";
+import UserContext from "./context/UserContext";
 
-function App() {
+export default function App() {
+  const [user, setUser] = useState({ haslogin: false, accessToken: "" });
+  useEffect(() => {
+    const cookieObject = hasCookie();
+    if (cookieObject.haslogin) {
+      setUser({
+        ...cookieObject,
+      });
+    }
+    console.log(user);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar user={user} setUser={setUser} />
+      {user.haslogin ? (
+        <Dashboard user={user} />
+      ) : (
+        <Authenticate user={user} setUser={setUser} />
+      )}
     </div>
   );
 }
-
-export default App;
