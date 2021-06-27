@@ -4,7 +4,6 @@ import { SetCookie, DeleteCookie, hasCookie } from "./utility/CookieManager";
 import Dashboard from "./components/Dashboard";
 import Authenticate from "./components/Authenticate";
 import Navbar from "./components/Navbar";
-import UserContext from "./context/UserContext";
 
 export default function App() {
   const [user, setUser] = useState({ haslogin: false, accessToken: "" });
