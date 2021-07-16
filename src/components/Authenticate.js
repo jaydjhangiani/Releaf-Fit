@@ -42,7 +42,7 @@ export default function Authenticate({ user, setUser }) {
           cookiePolicy={"single_host_origin"}
           responseType="code,token"
           scope={
-            "https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.location.read"
+            "https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.location.read https://www.googleapis.com/auth/fitness.sleep.read  "
           }
         />
       </LoginContainer>

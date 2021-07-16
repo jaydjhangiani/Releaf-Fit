@@ -23,12 +23,14 @@ export default function Dashboard({ user }) {
   const timeRightNow = new Date().getTime();
   getWeeklyData(timeRightNow, requestHeaders, callBack, weekData);
 
-  useEffect(() => {
-    if (!data.length > 0) {
-      setDataCalories();
-      console.log("hi");
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (!data.length > 0) {
+  //     // setDataCalories();
+  //     console.log("hi");
+  //   }
+  // }, [data]);
+
+  console.log(weekData);
 
   const setDataCalories = () => {
     setData(

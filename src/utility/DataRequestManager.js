@@ -1,6 +1,5 @@
 import axios from "axios";
 const { setReloadCookie, hasReloadCookie } = require("./CookieManager.js");
-const API_KEY = process.env.REACT_APP_API_KEY;
 const dataValues = [
   {
     title: "Calories",
@@ -17,6 +16,10 @@ const dataValues = [
   {
     title: "Steps",
     type: "com.google.step_count.delta",
+  },
+  {
+    title: "Sleep",
+    type: "com.google.sleep.segment",
   },
 ];
 // We need to get aggregated data *on that particular day for now*
@@ -38,6 +41,7 @@ export const getAggregatedDataBody = (dataType, endTime) => {
     aggregateBy: [
       {
         dataTypeName: dataType,
+        // dataTypeName: "com.google.sleep.segment",
       },
     ],
     bucketByTime: {
@@ -46,15 +50,18 @@ export const getAggregatedDataBody = (dataType, endTime) => {
     endTimeMillis: endTime,
     startTimeMillis: endTime - 7 * 86400000,
   };
+  console.log(endTime, endTime - 7 * 86400000);
   return requestBody;
 };
 
 export const getAggregateData = async (body, headers) => {
   const req = await axios.post(
     "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate",
+    // "https://www.googleapis.com/fitness/v1/users/userId/dataset:aggregate",
     body,
     headers
   );
+  console.log(req);
   return req;
 };
 
@@ -65,6 +72,7 @@ const baseObj = {
   Heart: 0,
   Move: 0,
   Steps: 0,
+  Sleep: 0,
 };
 
 export const getWeeklyData = async (
