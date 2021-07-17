@@ -57,7 +57,6 @@ export const getAggregatedDataBody = (dataType, endTime) => {
 export const getAggregateData = async (body, headers) => {
   const req = await axios.post(
     "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate",
-    // "https://www.googleapis.com/fitness/v1/users/userId/dataset:aggregate",
     body,
     headers
   );
