@@ -1,15 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { Bar } from "react-chartjs-2";
-import Loader from "./Loader";
+import exercise from "../assets/img/exercise.svg"
 
 export default function Chart({ weekData, item }) {
   return (
     <DashboardDetailsWrapper>
       {!weekData.length > 0 ? (
-        <ChartWrapper>
-          <h1>Your Weekly Analysis will be seen here.</h1>
-        </ChartWrapper>
+        <ChartWrapperImg>
+          <img src={exercise} alt="EXERCISE" />
+          <h3>Your Weekly Analysis will be seen here.</h3>
+        </ChartWrapperImg>
       ) : (
         <ChartWrapper>
           {console.log(item)}
@@ -64,6 +65,22 @@ const DashboardDetailsWrapper = styled.div`
   align-items: center;
   justify-content: center;
   grid-gap: 16px;
+  margin: 30px;
+`;
+
+const ChartWrapperImg = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  @media screen and (max-width: 768px) {
+    width: 80vw;
+  }
+  > img{
+    display: flex;
+    width: 50%;
+    margin-bottom: 30px;
+  }
 `;
 
 const ChartWrapper = styled.div`
@@ -76,16 +93,4 @@ const DashboardH2 = styled.h2`
   font-size: 1rem;
   margin-bottom: 10px;
 `;
-const DashboardP = styled.p`
-  font-size: 1rem;
-  text-align: center;
-`;
 
-const DashboardH1 = styled.h1`
-  font-size: 2rem;
-  margin-top: 25px;
-
-  @media screen and (max-width: 480px) {
-    font-size: 1.5rem;
-  }
-`;

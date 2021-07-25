@@ -4,11 +4,30 @@ import {
   getWeeklyData,
 } from "../utility/DataRequestManager";
 import styled from "styled-components";
+import SleepChart from "./SleepChart";
 import Chart from "./Chart";
+import axios from "axios";
+
+
+function msToTime(duration) {
+  duration = duration / 1000000; 
+  var milliseconds = parseInt((duration%1000)/100)
+  , seconds = parseInt((duration/1000)%60)
+  , minutes = parseInt((duration/(1000*60))%60)
+  , hours = parseInt((duration/(1000*60*60))%24);
+
+ hours = (hours < 10) ? "0" + hours : hours;
+ minutes = (minutes < 10) ? "0" + minutes : minutes;
+ seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+ return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+}
 
 export default function Dashboard({ user }) {
   const [data, setData] = useState([]);
   const [item, setItem] = useState("");
+  const [sleepData, setSleepData] = useState([]);
+  const [sleep, setSleep] = useState([])
   console.log(user);
   // fetch weekly data
   const accessToken = user.accessToken;
@@ -23,7 +42,7 @@ export default function Dashboard({ user }) {
   const timeRightNow = new Date().getTime();
   getWeeklyData(timeRightNow, requestHeaders, callBack, weekData);
 
-
+  
   console.log(weekData);
 
   const setDataCalories = () => {
@@ -82,17 +101,63 @@ export default function Dashboard({ user }) {
     });
   };
 
-  console.log(data);
+  console.log(user.accessToken)
+
+  useEffect(() => {
+    if(user){
+      const config = {
+        headers:{
+            "Authorization":`Bearer ${user.accessToken}`
+        }
+    }
+    
+    const body = {
+        aggregateBy: [
+         {
+           dataTypeName: "com.google.sleep.segment"
+         },
+       ],
+       endTimeMillis: 1626584659836,
+       startTimeMillis:1626498259836 
+      // endTimeMillis: timeRightNow - 86400000,
+      // startTimeMillis: timeRightNow - 86400000 - 86400000
+    }
+      axios.post("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate",body, config)
+          .then(response => {
+            setSleepData(response.data.bucket[0].dataset[0].point)
+          })
+          .catch(err => console.log(err.response.data.error.message))
+    }
+  },[user])
+
+  console.log(sleepData)
+
+  useEffect(() => {
+    if(sleepData.length > 0){
+      setSleep(
+        sleepData.map((item,index) => ({
+          index,
+          startTime: item.startTimeNanos,
+          endTime: item.endTimeNanos,
+          val: item?.value[0].intVal,
+          duration: (item.endTimeNanos - item.startTimeNanos )/1000000,
+          durationHMS: msToTime(item.endTimeNanos - item.startTimeNanos)
+        })
+      ))
+      }
+  },[sleepData])
+
+  console.log(sleep);
   return (
     <div>
       <DashboardWrapper>
         <DashboardDetailsCard>
-          <DashboardH2>{user.name}</DashboardH2>
-          <DashboardP>Your stats for the past week</DashboardP>
-        </DashboardDetailsCard>
-        <DashboardH1>
+          <DashboardH1>Welcome to Releaf Fit, demotest!</DashboardH1>
+          <DashboardH2>
           Stats for {weekData[6]?.Date.toString().split("2021")[0]}
-        </DashboardH1>
+        </DashboardH2>
+        </DashboardDetailsCard>
+        
         <DashboardDetailsWrapper>
           <DashboardCard onClick={(e) => setDataCalories()}>
             <DashboardH2>{weekData[6]?.Calories}</DashboardH2>
@@ -111,11 +176,25 @@ export default function Dashboard({ user }) {
             <DashboardP>Steps Travelled</DashboardP>
           </DashboardCard>
         </DashboardDetailsWrapper>
+        <ChartWrap>
         <Chart weekData={data} item={item} />
+        </ChartWrap>
+        <div>
+        {sleep.length > 0 ? <SleepChart sleep={sleep} /> : <h1>No Data</h1>}
+        </div>
       </DashboardWrapper>
     </div>
   );
 }
+
+const ChartWrap = styled.div`
+  margin-top: 30px;
+  background: #fff;
+  width: 760px;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  border: 1px solid whitesmoke;
+`;
 
 const DashboardWrapper = styled.div`
   max-width: 1000px;
@@ -128,7 +207,7 @@ const DashboardWrapper = styled.div`
 
 const DashboardDetailsCard = styled.div`
   background: #fff;
-  width: 80%;
+  width: 760px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -173,6 +252,7 @@ const DashboardCard = styled.div`
 
 const DashboardH2 = styled.h2`
   font-size: 1rem;
+  font-weight: 600;
   margin-bottom: 10px;
 `;
 const DashboardP = styled.p`
@@ -181,8 +261,10 @@ const DashboardP = styled.p`
 `;
 
 const DashboardH1 = styled.h1`
-  font-size: 2rem;
+  font-size: 1.75rem;
   margin-top: 25px;
+  font-weight: 500;
+  margin-bottom: 15px;
   @media screen and (max-width: 480px) {
     font-size: 1.5rem;
   }
