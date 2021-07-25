@@ -7,7 +7,9 @@ export default function Chart({ weekData, item }) {
   return (
     <DashboardDetailsWrapper>
       {!weekData.length > 0 ? (
-        <Loader />
+        <ChartWrapper>
+          <h1>Your Weekly Analysis will be seen here.</h1>
+        </ChartWrapper>
       ) : (
         <ChartWrapper>
           {console.log(item)}

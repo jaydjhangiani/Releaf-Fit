@@ -8,17 +8,19 @@ import { hasCookie, SetCookie } from "../utility/CookieManager";
 
 export default function Authenticate({ user, setUser }) {
   const handleLoginSuccess = (response) => {
-    console.log(response.mc.access_token);
-    if (response.mc.access_token) {
+    console.log(response)
+   
+    if (response.Zb.access_token) {
+      console.log(response.Zb.access_token);
       setUser({
         ...response.profileObj,
         haslogin: true,
-        accessToken: response.mc.access_token,
+        accessToken: response.Zb.access_token,
       });
 
       SetCookie({
         ...response.profileObj,
-        accessToken: response.mc.access_token,
+        accessToken: response.Zb.access_token,
       });
       console.log(user);
     }

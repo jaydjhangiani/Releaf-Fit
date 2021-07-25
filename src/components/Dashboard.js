@@ -23,12 +23,6 @@ export default function Dashboard({ user }) {
   const timeRightNow = new Date().getTime();
   getWeeklyData(timeRightNow, requestHeaders, callBack, weekData);
 
-  // useEffect(() => {
-  //   if (!data.length > 0) {
-  //     // setDataCalories();
-  //     console.log("hi");
-  //   }
-  // }, [data]);
 
   console.log(weekData);
 
@@ -143,7 +137,6 @@ const DashboardDetailsCard = styled.div`
   padding: 30px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
-
   &:hover {
     transform: scale(1.02);
     transition: all 0.2s ease-in-out;
@@ -171,7 +164,6 @@ const DashboardCard = styled.div`
   padding: 30px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
-
   &:hover {
     transform: scale(1.02);
     transition: all 0.2s ease-in-out;
@@ -191,7 +183,6 @@ const DashboardP = styled.p`
 const DashboardH1 = styled.h1`
   font-size: 2rem;
   margin-top: 25px;
-
   @media screen and (max-width: 480px) {
     font-size: 1.5rem;
   }

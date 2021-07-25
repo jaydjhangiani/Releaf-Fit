@@ -50,18 +50,16 @@ export const getAggregatedDataBody = (dataType, endTime) => {
     endTimeMillis: endTime,
     startTimeMillis: endTime - 7 * 86400000,
   };
-  console.log(endTime, endTime - 7 * 86400000);
+  console.log(endTime, endTime -  86400000);
   return requestBody;
 };
 
 export const getAggregateData = async (body, headers) => {
   const req = await axios.post(
     "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate",
-    // "https://www.googleapis.com/fitness/v1/users/userId/dataset:aggregate",
     body,
     headers
   );
-  console.log(req);
   return req;
 };
 

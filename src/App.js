@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import React, { useEffect, useState } from "react";
 import { SetCookie, DeleteCookie, hasCookie } from "./utility/CookieManager";
 import Dashboard from "./components/Dashboard";
 import Authenticate from "./components/Authenticate";
